@@ -1848,8 +1848,14 @@
                     glyphs: 'https://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
                     layers: [{ id: 'background', type: 'background', paint: { 'background-color': '#000000' } }]
                 },
-                center: [137.0, 38.0], zoom: 5, pitch: 40, hash: true
+                center: [137.0, 38.0], zoom: 5, pitch: 0, hash: true,
+                dragRotate: false,
+                pitchWithRotate: false,
+                touchPitch: false
             });
+
+            // 2本指操作での回転のみ無効化し、ピンチズームは有効のまま維持
+            map.touchZoomRotate.disableRotation();
 
             // MapLibre内部エラーをデバッグコンソールに流す
             map.on('error', e => {
@@ -3233,7 +3239,11 @@
             updateLegendToggle();
         };
         document.getElementById('reset-view-btn').onclick = () => {
-            map.flyTo({ center: [137.0, 38.0], zoom: 5, pitch: 40, bearing: 0, duration: 1000 });
+            // 北海道〜九州が収まる範囲にフィット（傾きなし）
+            map.fitBounds(
+                [[128.5, 30.5], [146.5, 45.8]],
+                { pitch: 0, bearing: 0, padding: 40, duration: 1000 }
+            );
         };
 
         // --vh を実際の window.innerHeight から設定（ブラウザUIを除いた正確な高さ）
