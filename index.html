@@ -1848,14 +1848,8 @@
                     glyphs: 'https://fonts.openmaptiles.org/{fontstack}/{range}.pbf',
                     layers: [{ id: 'background', type: 'background', paint: { 'background-color': '#000000' } }]
                 },
-                center: [137.0, 38.0], zoom: 5, pitch: 0, hash: true,
-                dragRotate: false,
-                pitchWithRotate: false,
-                touchPitch: false
+                center: [137.0, 38.0], zoom: 5, pitch: 40, hash: true
             });
-
-            // 2本指操作での回転のみ無効化し、ピンチズームは有効のまま維持
-            map.touchZoomRotate.disableRotation();
 
             // MapLibre内部エラーをデバッグコンソールに流す
             map.on('error', e => {
