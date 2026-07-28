@@ -1034,6 +1034,7 @@
 
         function getTempColor(temp) {
             if (temp === null) return 'transparent';
+            if (temp >= 40) return '#000000';
             if (temp >= 35) return '#B40068';
             if (temp >= 30) return '#FF2800';
             if (temp >= 25) return '#FF9900';
@@ -1044,6 +1045,11 @@
             if (temp >= 0)  return '#0099FF';
             if (temp >= -5) return '#0000FF';
             return '#10008F';
+        }
+
+        // 40度以上（黒丸）の場合のみ枠線を白にし、視認性を確保する
+        function getTempStrokeColor(temp) {
+            return (temp !== null && temp >= 40) ? '#FFFFFF' : '#000000';
         }
 
         const MAP_CACHE_NAME = 'wisviewer-map-v1';
@@ -2138,6 +2144,7 @@
                                 sizeTemp: temp !== null ? Math.abs(temp) : 0,
                                 sizePrec: prec !== null ? prec : 0,
                                 tempColor: getTempColor(temp),
+                                tempStroke: getTempStrokeColor(temp),
                                 precColor: getPrecColor(prec)
                             }
                         };
@@ -2155,7 +2162,7 @@
                             'circle-radius': getPointRadiusExpression('temp'), 
                             'circle-color': ['get', 'tempColor'], 
                             'circle-stroke-width': 1.5, 
-                            'circle-stroke-color': '#000000' 
+                            'circle-stroke-color': ['get', 'tempStroke'] 
                         } 
                     });
                     
@@ -2416,6 +2423,7 @@
                                     sizeTemp:  temp    !== null ? Math.abs(temp) : 0,
                                     sizePrec:  prec    !== null ? prec           : 0,
                                     tempColor: getTempColor(temp),
+                                    tempStroke: getTempStrokeColor(temp),
                                     precColor: getPrecColor(prec),
                                 }
                             };
@@ -3041,7 +3049,8 @@
             if (currentMode === 'temp') {
                 title.innerText = "気温 (℃)";
                 items = [
-                    { color: '#B40068', label: '35以上 (猛暑日)' }, { color: '#FF2800', label: '30〜35 (真夏日)' },
+                    { color: '#000000', label: '40以上 (酷暑日)', border: '1px solid #FFFFFF' },
+                    { color: '#B40068', label: '35〜40 (猛暑日)' }, { color: '#FF2800', label: '30〜35 (真夏日)' },
                     { color: '#FF9900', label: '25〜30 (夏日)' }, { color: '#FFEF00', label: '20〜25' },
                     { color: '#99FF00', label: '15〜20' }, { color: '#00FF00', label: '10〜15' },
                     { color: '#00FFFF', label: '5〜10' }, { color: '#0099FF', label: '0〜5' },
